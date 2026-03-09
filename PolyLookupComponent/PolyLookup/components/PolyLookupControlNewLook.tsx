@@ -83,6 +83,7 @@ export default function PolyLookupControlNewLook({
   relationshipType,
   clientUrl,
   lookupView,
+  placeholder,
   itemLimit,
   pageSize,
   disabled,
@@ -310,7 +311,7 @@ export default function PolyLookupControlNewLook({
       });
   };
 
-  const placeholder = getPlaceholder(
+  const placeholderValue = getPlaceholder(
     isAuthoringMode ?? false,
     formType ?? XrmEnum.FormType.Undefined,
     outputSelectedItems ?? false,
@@ -320,7 +321,8 @@ export default function PolyLookupControlNewLook({
     selectedOptions?.length ?? 0,
     disabled ?? false,
     metadata?.associatedEntity.DisplayCollectionNameLocalized,
-    languagePack
+    languagePack,
+    placeholder
   );
 
   return (
@@ -385,7 +387,7 @@ export default function PolyLookupControlNewLook({
           </TagGroup>
 
           <TagPickerInput
-            placeholder={placeholder}
+            placeholder={placeholderValue}
             value={searchText}
             disabled={
               disabled ||

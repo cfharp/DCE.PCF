@@ -8,6 +8,7 @@ export interface PolyLookupProps {
   relationshipType: RelationshipTypeEnum;
   clientUrl: string;
   lookupView?: string;
+  placeholder?: string;
   itemLimit?: number;
   pageSize?: number;
   disabled?: boolean;

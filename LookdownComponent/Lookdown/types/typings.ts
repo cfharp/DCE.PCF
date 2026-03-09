@@ -9,6 +9,7 @@ export interface LookdownControlProps {
   groupBy?: string | null;
   optionTemplate?: string | null; // example of optionTemplate: {{ fullname }} - {{ emailaddress1 }}
   selectedItemTemplate?: string | null; // example of selectedItemTemplate: {{ fullname }} - {{ emailaddress1 }}
+  placeholder?: string;
   showIcon?: ShowIconOptions;
   iconSize?: IconSizes;
   openRecordMode?: OpenRecordMode;

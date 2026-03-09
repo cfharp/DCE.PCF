@@ -1,50 +1,78 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <manifest>
-  <control namespace="DCEPCF" constructor="Lookdown" version="1.3.4" display-name-key="Lookdown v1.3.4" description-key="Display a lookup control as a dropdown" control-type="virtual" >
+  <control namespace="DCEPCF" constructor="Lookdown" version="1.4.0"
+    display-name-key="Lookdown v1.4.0" description-key="Display a lookup control as a dropdown"
+    control-type="standard">
     <external-service-usage enabled="false">
-      <!--UNCOMMENT TO ADD EXTERNAL DOMAINS
+      <!--UNCOMMENT
+      TO ADD EXTERNAL DOMAINS
       <domain></domain>
       <domain></domain>
       -->
     </external-service-usage>
-    <!-- property node identifies a specific, configurable piece of data that the control expects from CDS -->
-    <property name="lookupField" display-name-key="Lookup Field" description-key="The lookup field that the component is bound to." of-type="Lookup.Simple" usage="bound" required="true" />
-    <property name="customFilter" display-name-key="Custom Filter" description-key="Additional filter to be added to the Lookup view. Custom filter should be serialized as a FetchXML filter node." of-type-group="text" usage="input" required="false" />
-    <property name="groupByField" display-name-key="Group By Field" description-key="Group the options dropdown by this field." of-type="SingleLine.Text" usage="input" required="false" />
-    <property name="optionTemplate" display-name-key="Option Display Template" description-key="Dynamic template to display option text." of-type="SingleLine.Text" usage="input" required="false" />
-    <property name="selectedItemTemplate" display-name-key="Selected Option Display Template" description-key="Dynamic template to display selected option text. Default to option text if not provided." of-type="SingleLine.Text" usage="input" required="false" />
-    <property name="showIcon" display-name-key="Show Icon" description-key="Whether to show an icon in option item. Default: None." of-type="Enum" usage="input" required="false" default-value="0" >
+    <!-- property node identifies a specific, configurable piece of data that the control expects
+    from CDS -->
+    <property name="lookupField" display-name-key="Lookup Field"
+      description-key="The lookup field that the component is bound to." of-type="Lookup.Simple"
+      usage="bound" required="true" />
+    <property name="customFilter" display-name-key="Custom Filter"
+      description-key="Additional filter to be added to the Lookup view. Custom filter should be serialized as a FetchXML filter node."
+      of-type-group="text" usage="input" required="false" />
+    <property name="groupByField" display-name-key="Group By Field"
+      description-key="Group the options dropdown by this field." of-type="SingleLine.Text"
+      usage="input" required="false" />
+    <property name="optionTemplate" display-name-key="Option Display Template"
+      description-key="Dynamic template to display option text." of-type="SingleLine.Text"
+      usage="input" required="false" />
+    <property name="selectedItemTemplate" display-name-key="Selected Option Display Template"
+      description-key="Dynamic template to display selected option text. Default to option text if not provided."
+      of-type="SingleLine.Text" usage="input" required="false" />
+    <property name="placeholder" display-name-key="Placeholder"
+      description-key="The text that shows when no value is selected. This will override placeholder from language pack."
+      of-type="SingleLine.Text"
+      usage="input" required="false" />
+    <property name="showIcon" display-name-key="Show Icon"
+      description-key="Whether to show an icon in option item. Default: None." of-type="Enum"
+      usage="input" required="false" default-value="0">
       <value name="none" display-name-key="None">0</value>
       <value name="entityIcon" display-name-key="Use Entity Icon">1</value>
       <value name="recordImage" display-name-key="Use Record Image">2</value>
     </property>
-    <property name="iconSize" display-name-key="Icon Size" description-key="Icon size applicable when showing icon. Default: Normal." of-type="Enum" usage="input" required="false" default-value="0" >
+    <property name="iconSize" display-name-key="Icon Size"
+      description-key="Icon size applicable when showing icon. Default: Normal." of-type="Enum"
+      usage="input" required="false" default-value="0">
       <value name="normal" display-name-key="Normal">0</value>
       <value name="large" display-name-key="Large">1</value>
     </property>
-    <property name="commandOpenRecord" display-name-key="Open Record Command" description-key="Show command button to open the lookup record. Default: No." of-type="Enum" usage="input" required="false" default-value="0" >
+    <property name="commandOpenRecord" display-name-key="Open Record Command"
+      description-key="Show command button to open the lookup record. Default: No." of-type="Enum"
+      usage="input" required="false" default-value="0">
       <value name="no" display-name-key="No">0</value>
       <value name="inline" display-name-key="Inline">1</value>
       <value name="dialog" display-name-key="Dialog">2</value>
     </property>
-    <property name="commandQuickCreate" display-name-key="Quick Create Command" description-key="Show command to quick create new option. Default: No." of-type="Enum" usage="input" required="false" default-value="0" >
+    <property name="commandQuickCreate" display-name-key="Quick Create Command"
+      description-key="Show command to quick create new option. Default: No." of-type="Enum"
+      usage="input" required="false" default-value="0">
       <value name="no" display-name-key="No">0</value>
       <value name="yes" display-name-key="Yes">1</value>
     </property>
-    <property name="commandLookup" display-name-key="Lookup Panel Command" description-key="Show command to open the Lookup Panel. Default: No." of-type="Enum" usage="input" required="false" default-value="0" >
+    <property name="commandLookup" display-name-key="Lookup Panel Command"
+      description-key="Show command to open the Lookup Panel. Default: No." of-type="Enum"
+      usage="input" required="false" default-value="0">
       <value name="no" display-name-key="No">0</value>
       <value name="yes" display-name-key="Yes">1</value>
     </property>
-    <property name="languagePackPath" display-name-key="Language Pack Path" description-key="Path to a resx web resource, relative to the environment url (eg. /webresources/new_/resx/Lookdown.1033.resx), to be used as Language Pack. Default to English if not provided." of-type="SingleLine.Text" usage="input" required="false" />
+    <property name="languagePackPath" display-name-key="Language Pack Path"
+      description-key="Path to a resx web resource, relative to the environment url (eg. /webresources/new_/resx/Lookdown.1033.resx), to be used as Language Pack. Default to English if not provided."
+      of-type="SingleLine.Text" usage="input" required="false" />
     <type-group name="text">
       <type>SingleLine.Text</type>
       <type>SingleLine.TextArea</type>
       <type>Multiple</type>
     </type-group>
     <resources>
-      <code path="index.ts" order="1"/>
-      <platform-library name="React" version="16.8.6" />
-      <platform-library name="Fluent" version="9.46.2" />
+      <code path="index.ts" order="1" />
       <!-- UNCOMMENT TO ADD MORE RESOURCES
       <css path="css/Lookdown.css" order="1" />
       -->

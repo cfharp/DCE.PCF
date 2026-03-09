@@ -24,7 +24,6 @@ export class PolyLookup implements ComponentFramework.StandardControl<IInputs, I
   /**
    * Empty constructor.
    */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor() {
     // Empty constructor
   }
@@ -54,7 +53,7 @@ export class PolyLookup implements ComponentFramework.StandardControl<IInputs, I
       EmptyListMessage: context.resources.getString("EmptyListMessage"),
       LoadingMessage: context.resources.getString("LoadingMessage"),
       PlaceholderDefault: context.resources.getString("PlaceholderDefault"),
-      Placeholder: context.resources.getString("Placeholder"),
+      PlaceholderLabel: context.resources.getString("PlaceholderLabel"),
       RelationshipNotSupportedMessage: context.resources.getString("RelationshipNotSupportedMessage"),
       SuggestionListHeaderDefaultLabel: context.resources.getString("SuggestionListHeaderDefaultLabel"),
       SuggestionListHeaderLabel: context.resources.getString("SuggestionListHeaderLabel"),
@@ -107,14 +106,18 @@ export class PolyLookup implements ComponentFramework.StandardControl<IInputs, I
       // ignore error
     }
 
+    const placeholder =
+      this.context.parameters.placeholder?.raw ?? (this.context.mode.isAuthoringMode ? "---" : undefined);
+
     const props: PolyLookupProps = {
       currentTable: this.context.page.entityTypeName,
       currentRecordId: this.context.page.entityId,
       relationshipName: this.context.parameters.relationship?.raw ?? "",
       relationship2Name: this.context.parameters.relationship2?.raw ?? undefined,
       relationshipType: Number.parseInt(this.context.parameters.relationshipType?.raw) as RelationshipTypeEnum,
-      clientUrl: clientUrl,
+      clientUrl,
       lookupView: this.context.parameters.lookupView?.raw ?? undefined,
+      placeholder,
       itemLimit: this.context.parameters.itemLimit?.raw ?? undefined,
       pageSize: this.context.userSettings?.pagingLimit ?? undefined,
       disabled: this.context.mode.isControlDisabled,

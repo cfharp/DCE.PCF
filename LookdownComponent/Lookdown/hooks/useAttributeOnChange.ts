@@ -1,15 +1,16 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { getHandlebarsVariables } from "../services/TemplateService";
 import { IMetadata } from "../types/metadata";
 
 export function useAttributeOnChange(metadata: IMetadata | undefined, customFilter?: string | null) {
   const queryClient = useQueryClient();
-  const invalidateFetchDataFn = useCallback((context) => {
-    queryClient.invalidateQueries({ queryKey: ["entityRecords"] });
-  }, []);
 
   useEffect(() => {
+    const invalidateFetchDataFn = () => {
+      queryClient.invalidateQueries({ queryKey: ["entityRecords"] });
+    };
+
     const templateVar = getHandlebarsVariables((metadata?.lookupView.fetchxml ?? "") + (customFilter ?? ""));
     if (templateVar.length) {
       templateVar.forEach((v) => {
@@ -17,12 +18,10 @@ export function useAttributeOnChange(metadata: IMetadata | undefined, customFilt
       });
     }
 
-    // TODO: not sure why this is not working
-    // return () => {
-    //   console.log("cleanup");
-    //   templateVar.forEach((v) => {
-    //     Xrm.Page.data.entity.attributes.get(v)?.removeOnChange(invalidateFetchDataFn);
-    //   });
-    // };
+    return () => {
+      templateVar.forEach((v) => {
+        Xrm.Page.getAttribute(v)?.removeOnChange(invalidateFetchDataFn);
+      });
+    };
   }, [metadata?.lookupView.fetchxml, customFilter]);
 }
