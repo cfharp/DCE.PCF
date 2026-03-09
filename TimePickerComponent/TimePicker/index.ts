@@ -36,7 +36,9 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
     this.context = context;
     this.container = container;
     this.notifyOutputChanged = notifyOutputChanged;
-    this.root = createRoot(this.container);
+    this.root = createRoot(this.container, {
+      identifierPrefix: "DCEPCF-TimePicker",
+    });
   }
 
   /**
@@ -72,11 +74,14 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
       ? this.convertToLocalDate(this.context.parameters.dateAnchor)
       : undefined;
 
+    const placeholder =
+      this.context.parameters.placeholder?.raw ?? (this.context.mode.isAuthoringMode ? "---" : undefined);
+
     const props: TimePickerControlProps = {
       inputValue: boundValue,
       dateAnchor,
       disabled: this.context.mode.isControlDisabled,
-      placeholder: this.context.mode.isAuthoringMode ? "---" : (this.context.parameters.placeholder?.raw ?? undefined),
+      placeholder,
       increment: this.context.parameters.increment?.raw ?? undefined,
       hourCycle12: this.context.parameters.hourCycle12?.raw === "1",
       freeform: this.context.parameters.freeform?.raw === "1",
