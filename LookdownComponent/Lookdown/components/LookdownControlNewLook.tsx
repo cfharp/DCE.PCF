@@ -3,6 +3,7 @@ import {
   DropdownProps,
   FluentProvider,
   Image,
+  Input,
   Menu,
   MenuButton,
   MenuItem,
@@ -19,8 +20,8 @@ import {
 } from "@fluentui/react-components";
 import { AddRegular, MoreVerticalRegular, OpenRegular, SearchRegular } from "@fluentui/react-icons";
 import { useQueryClient } from "@tanstack/react-query";
-import React, { MouseEventHandler, useCallback, useEffect, useState } from "react";
-import { getCustomFilterString, getHandlebarsVariables } from "../services/TemplateService";
+import React, { MouseEventHandler, useState } from "react";
+import { getCustomFilterString } from "../services/TemplateService";
 import { EntityOption, IconSizes, LookdownControlProps, OpenRecordMode, ShowIconOptions } from "../types/typings";
 import { useAttributeOnChange } from "../hooks/useAttributeOnChange";
 import { useEntityOptions } from "../hooks/queries/useEntityOptions";
@@ -319,60 +320,75 @@ export default function LookdownControlNewLook({
     });
   };
 
+  const theme = fluentDesign?.tokenTheme;
+  const currentTheme = disabled
+    ? {
+        ...theme,
+        colorCompoundBrandStroke: theme?.colorNeutralStroke1,
+        colorCompoundBrandStrokeHover: theme?.colorNeutralStroke1Hover,
+        colorCompoundBrandStrokePressed: theme?.colorNeutralStroke1Pressed,
+        colorCompoundBrandStrokeSelected: theme?.colorNeutralStroke1Selected,
+      }
+    : theme;
+
   return (
-    <FluentProvider style={{ width: "100%" }} theme={fluentDesign?.tokenTheme}>
-      <div className={styles.root}>
-        <Dropdown
-          appearance="filled-darker"
-          className={dropdownStyles}
-          clearable={!disabled && !isError}
-          disabled={disabled || isError}
-          placeholder={isError ? languagePack.LoadDataErrorMessage : placeholder}
-          value={isError ? "" : selectedDisplayText}
-          selectedOptions={isError ? [] : selectedValues}
-          button={
-            selectedId && selectedOption ? (
-              <OptionDisplay
-                optionText={selectedOption?.optionText ?? placeholder ?? ""}
-                iconSrc={selectedOption?.iconSrc}
-                iconSize={selectedOption?.iconSize}
-              />
-            ) : undefined
-          }
-          expandIcon={disabled || isError ? { className: styles.hidden } : undefined}
-          onOptionSelect={handleOptionSelect}
-        >
-          {renderOptions()}
-        </Dropdown>
-        {hasActions ? (
-          <Menu>
-            <MenuTrigger disableButtonEnhancement>
-              <Tooltip content="more actions" relationship="label">
-                <MenuButton appearance="subtle" icon={<MoreVerticalRegular />} />
-              </Tooltip>
-            </MenuTrigger>
-            <MenuPopover>
-              <MenuList>
-                {openRecordMode ? (
-                  <MenuItem icon={<OpenRegular />} onClick={handleOpenRecordMenuClick}>
-                    {languagePack.OpenRecordLabel}
-                  </MenuItem>
-                ) : null}
-                {allowQuickCreate && !disabled && !isError ? (
-                  <MenuItem icon={<AddRegular />} onClick={handleQuickCreateMenuClick}>
-                    {languagePack.QuickCreateLabel}
-                  </MenuItem>
-                ) : null}
-                {allowLookupPanel && !disabled && !isError ? (
-                  <MenuItem icon={<SearchRegular />} onClick={handleLookupPanelMenuClick}>
-                    {languagePack.LookupPanelLabel}
-                  </MenuItem>
-                ) : null}
-              </MenuList>
-            </MenuPopover>
-          </Menu>
-        ) : null}
-      </div>
+    <FluentProvider style={{ width: "100%" }} theme={currentTheme}>
+      {disabled ? (
+        <Input className={styles.root} appearance="filled-darker" readOnly value={selectedDisplayText} />
+      ) : (
+        <div className={styles.root}>
+          <Dropdown
+            appearance="filled-darker"
+            className={dropdownStyles}
+            clearable={!isError}
+            disabled={isError}
+            placeholder={isError ? languagePack.LoadDataErrorMessage : placeholder}
+            value={isError ? "" : selectedDisplayText}
+            selectedOptions={isError ? [] : selectedValues}
+            button={
+              selectedId && selectedOption ? (
+                <OptionDisplay
+                  optionText={selectedOption?.optionText ?? placeholder ?? ""}
+                  iconSrc={selectedOption?.iconSrc}
+                  iconSize={selectedOption?.iconSize}
+                />
+              ) : undefined
+            }
+            expandIcon={isError ? { className: styles.hidden } : undefined}
+            onOptionSelect={handleOptionSelect}
+          >
+            {renderOptions()}
+          </Dropdown>
+          {hasActions ? (
+            <Menu>
+              <MenuTrigger disableButtonEnhancement>
+                <Tooltip content="more actions" relationship="label">
+                  <MenuButton appearance="subtle" icon={<MoreVerticalRegular />} />
+                </Tooltip>
+              </MenuTrigger>
+              <MenuPopover>
+                <MenuList>
+                  {openRecordMode ? (
+                    <MenuItem icon={<OpenRegular />} onClick={handleOpenRecordMenuClick}>
+                      {languagePack.OpenRecordLabel}
+                    </MenuItem>
+                  ) : null}
+                  {allowQuickCreate && !isError ? (
+                    <MenuItem icon={<AddRegular />} onClick={handleQuickCreateMenuClick}>
+                      {languagePack.QuickCreateLabel}
+                    </MenuItem>
+                  ) : null}
+                  {allowLookupPanel && !isError ? (
+                    <MenuItem icon={<SearchRegular />} onClick={handleLookupPanelMenuClick}>
+                      {languagePack.LookupPanelLabel}
+                    </MenuItem>
+                  ) : null}
+                </MenuList>
+              </MenuPopover>
+            </Menu>
+          ) : null}
+        </div>
+      )}
     </FluentProvider>
   );
 }
