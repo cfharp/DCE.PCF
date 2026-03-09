@@ -48,6 +48,7 @@ export default function PolyLookupControlClassic({
   relationshipType,
   clientUrl,
   lookupView,
+  placeholder,
   itemLimit,
   pageSize,
   disabled,
@@ -358,7 +359,7 @@ export default function PolyLookupControlClassic({
       : languagePack.EmptyListDefaultMessage;
   }
 
-  const placeholder = getPlaceholder(
+  const placeholderValue = getPlaceholder(
     isAuthoringMode ?? false,
     formType ?? XrmEnum.FormType.Undefined,
     outputSelectedItems ?? false,
@@ -368,7 +369,8 @@ export default function PolyLookupControlClassic({
     selectedItems?.length ?? selectedItemsCreate.length ?? 0,
     disabled ?? false,
     metadata?.associatedEntity.DisplayCollectionNameLocalized,
-    languagePack
+    languagePack,
+    placeholder
   );
 
   return (
@@ -513,7 +515,7 @@ export default function PolyLookupControlClassic({
       }}
       resolveDelay={100}
       inputProps={{
-        placeholder: placeholder,
+        placeholder: placeholderValue,
       }}
       pickerCalloutProps={{
         calloutMaxWidth: 500,

@@ -121,7 +121,7 @@
     <value>Select an option</value>
     <comment>Used when Table Plural Name is not available</comment>
   </data>
-  <data name="Placeholder" xml:space="preserve">
+  <data name="PlaceholderLabel" xml:space="preserve">
     <value>Select %s</value>
     <comment>Select { Table Plural Name }</comment>
   </data>

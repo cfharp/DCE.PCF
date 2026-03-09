@@ -1,6 +1,6 @@
 export interface LanguagePack {
   PlaceholderDefault: string;
-  Placeholder: string;
+  PlaceholderLabel: string;
   EmptyListDefaultMessage: string;
   EmptyListMessage: string;
   SuggestionListHeaderDefaultLabel: string;

@@ -11,9 +11,14 @@ export function getPlaceholder(
   selectedCount: number,
   disabled: boolean,
   entityName: string | undefined,
-  languagePack: LanguagePack
+  languagePack: LanguagePack,
+  placeholder?: string
 ): string {
   if (isAuthoringMode) {
+    if (placeholder) {
+      return placeholder;
+    }
+
     return "---";
   }
 
@@ -41,5 +46,9 @@ export function getPlaceholder(
     return "";
   }
 
-  return entityName ? sprintf(languagePack.Placeholder, entityName) : languagePack.PlaceholderDefault;
+  if (placeholder) {
+    return placeholder;
+  }
+
+  return entityName ? sprintf(languagePack.PlaceholderLabel, entityName) : languagePack.PlaceholderDefault;
 }
