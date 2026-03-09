@@ -14,9 +14,9 @@ import {
   Stack,
 } from "@fluentui/react";
 import { useQueryClient } from "@tanstack/react-query";
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import { getClassicDropdownOptions } from "../services/DropdownHelper";
-import { getCustomFilterString, getHandlebarsVariables } from "../services/TemplateService";
+import { getCustomFilterString } from "../services/TemplateService";
 import { EntityOption, LookdownControlProps, OpenRecordMode } from "../types/typings";
 import { useAttributeOnChange } from "../hooks/useAttributeOnChange";
 import { useEntityOptions } from "../hooks/queries/useEntityOptions";
@@ -85,6 +85,7 @@ export default function LookdownControlClassic({
   groupBy,
   optionTemplate,
   selectedItemTemplate,
+  placeholder,
   showIcon,
   iconSize,
   openRecordMode,
@@ -299,7 +300,7 @@ export default function LookdownControlClassic({
       >
         <Dropdown
           selectedKey={isError ? null : selectedId ?? null}
-          placeholder={isError ? languagePack.LoadDataErrorMessage : "---"}
+          placeholder={isError ? languagePack.LoadDataErrorMessage : placeholder}
           options={getClassicDropdownOptions(entityOptions ?? [], selectedOption, groupBy ?? null, languagePack)}
           disabled={isError ? true : disabled}
           onChange={(event, option) => {

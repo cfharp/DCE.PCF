@@ -12,4 +12,7 @@ interface IExtendedUtility extends ComponentFramework.Utility {
 
 export interface IExtendedContext extends ComponentFramework.Context<IInputs> {
   utils: IExtendedUtility;
+  mode: ComponentFramework.Mode & {
+    isAuthoringMode: boolean;
+  };
 }

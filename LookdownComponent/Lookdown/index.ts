@@ -1,12 +1,14 @@
-import { createElement } from "react";
-import LookdownControl from "./components/LookdownControl";
+import React from "react";
+import { Root, createRoot } from "react-dom/client";
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
 import { IExtendedContext } from "./types/extendedContext";
 import { LanguagePack } from "./types/languagePack";
 import { IconSizes, LookdownControlProps, OpenRecordMode, ShowIconOptions } from "./types/typings";
+import LookdownControl from "./components/LookdownControl";
 
-export class Lookdown implements ComponentFramework.ReactControl<IInputs, IOutputs> {
-  private theComponent: ComponentFramework.ReactControl<IInputs, IOutputs>;
+export class Lookdown implements ComponentFramework.StandardControl<IInputs, IOutputs> {
+  private container: HTMLDivElement;
+  private root: Root;
   private notifyOutputChanged: () => void;
   private output: ComponentFramework.LookupValue | null;
   private context: IExtendedContext;
@@ -15,8 +17,9 @@ export class Lookdown implements ComponentFramework.ReactControl<IInputs, IOutpu
   /**
    * Empty constructor.
    */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor() {}
+  constructor() {
+    // Empty constructor
+  }
 
   /**
    * Used to initialize the control instance. Controls can kick off remote server calls and other initialization actions here.
@@ -24,10 +27,17 @@ export class Lookdown implements ComponentFramework.ReactControl<IInputs, IOutpu
    * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to property names defined in the manifest, as well as utility functions.
    * @param notifyOutputChanged A callback method to alert the framework that the control has new outputs ready to be retrieved asynchronously.
    * @param state A piece of data that persists in one session for a single user. Can be set at any point in a controls life cycle by calling 'setControlState' in the Mode interface.
+   * @param container If a control is marked control-type='standard', it will receive an empty div element within which it can render its content.
    */
-  public init(context: IExtendedContext, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary): void {
+  public init(
+    context: IExtendedContext,
+    notifyOutputChanged: () => void,
+    state: ComponentFramework.Dictionary,
+    container: HTMLDivElement
+  ): void {
     this.notifyOutputChanged = notifyOutputChanged;
     this.context = context;
+    this.container = container;
     this.languagePack = {
       BlankValueLabel: context.resources.getString("BlankValueLabel"),
       EmptyListMessage: context.resources.getString("EmptyListMessage"),
@@ -36,52 +46,23 @@ export class Lookdown implements ComponentFramework.ReactControl<IInputs, IOutpu
       LookupPanelLabel: context.resources.getString("LookupPanelLabel"),
       LoadDataErrorMessage: context.resources.getString("LoadDataErrorMessage"),
     };
+
+    // Clear the container to avoid conflicts
+    container.innerHTML = "";
+
+    // Initialize React root
+    this.root = createRoot(container, {
+      identifierPrefix: "DCEPCF-Lookdown",
+    });
   }
 
   /**
    * Called when any value in the property bag has changed. This includes field values, data-sets, global values such as container height and width, offline status, control metadata values such as label, visible, etc.
    * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
-   * @returns ReactElement root react element for the control
    */
-  public updateView(context: IExtendedContext): React.ReactElement {
+  public updateView(context: IExtendedContext): void {
     this.context = context;
-
-    const isAuthoringMode = typeof context.parameters.lookupField?.getViewId === "function" ? false : true;
-
-    const props: LookdownControlProps = {
-      lookupViewId: isAuthoringMode
-        ? undefined
-        : context.parameters.lookupField?.getViewId() ??
-          context.utils._customControlProperties.descriptor.Parameters.DefaultViewId,
-      lookupEntity: isAuthoringMode ? undefined : context.parameters.lookupField.getTargetEntityType(),
-      selectedId: context.parameters.lookupField?.raw?.at(0)?.id,
-      selectedText: context.parameters.lookupField?.raw?.at(0)?.name,
-      customFilter: context.parameters.customFilter?.raw,
-      groupBy: context.parameters.groupByField?.raw,
-      optionTemplate: context.parameters.optionTemplate?.raw,
-      selectedItemTemplate: context.parameters.selectedItemTemplate?.raw,
-      showIcon: context.parameters.showIcon?.raw
-        ? (Number.parseInt(context.parameters.showIcon.raw) as ShowIconOptions)
-        : undefined,
-      iconSize: context.parameters.iconSize?.raw
-        ? (Number.parseInt(context.parameters.iconSize.raw) as IconSizes)
-        : undefined,
-      openRecordMode: context.parameters.commandOpenRecord?.raw
-        ? (Number.parseInt(context.parameters.commandOpenRecord.raw) as OpenRecordMode)
-        : undefined,
-      allowQuickCreate: context.parameters.commandQuickCreate?.raw === "1",
-      allowLookupPanel: context.parameters.commandQuickCreate?.raw === "1",
-      disabled: context.mode.isControlDisabled,
-      defaultLanguagePack: this.languagePack,
-      languagePackPath: context.parameters.languagePackPath?.raw ?? undefined,
-      fluentDesign: this.context.fluentDesignLanguage,
-      onChange: (value) => {
-        this.output = value;
-        this.notifyOutputChanged();
-      },
-    };
-
-    return createElement(LookdownControl, props);
+    this.render();
   }
 
   /**
@@ -100,5 +81,48 @@ export class Lookdown implements ComponentFramework.ReactControl<IInputs, IOutpu
    */
   public destroy(): void {
     // Add code to cleanup control if necessary
+    this.root.unmount();
+  }
+
+  public render(): void {
+    const isAuthoringMode = this.context.mode?.isAuthoringMode;
+    const placeholder =
+      this.context.parameters.placeholder?.raw ?? (this.context.mode.isAuthoringMode ? "---" : undefined);
+
+    const props: LookdownControlProps = {
+      lookupViewId: isAuthoringMode
+        ? undefined
+        : this.context.parameters.lookupField?.getViewId() ??
+          this.context.utils._customControlProperties.descriptor.Parameters.DefaultViewId,
+      lookupEntity: isAuthoringMode ? undefined : this.context.parameters.lookupField.getTargetEntityType(),
+      selectedId: this.context.parameters.lookupField?.raw?.at(0)?.id,
+      selectedText: this.context.parameters.lookupField?.raw?.at(0)?.name,
+      customFilter: this.context.parameters.customFilter?.raw,
+      groupBy: this.context.parameters.groupByField?.raw,
+      optionTemplate: this.context.parameters.optionTemplate?.raw,
+      selectedItemTemplate: this.context.parameters.selectedItemTemplate?.raw,
+      placeholder: placeholder,
+      showIcon: this.context.parameters.showIcon?.raw
+        ? (Number.parseInt(this.context.parameters.showIcon.raw) as ShowIconOptions)
+        : undefined,
+      iconSize: this.context.parameters.iconSize?.raw
+        ? (Number.parseInt(this.context.parameters.iconSize.raw) as IconSizes)
+        : undefined,
+      openRecordMode: this.context.parameters.commandOpenRecord?.raw
+        ? (Number.parseInt(this.context.parameters.commandOpenRecord.raw) as OpenRecordMode)
+        : undefined,
+      allowQuickCreate: this.context.parameters.commandQuickCreate?.raw === "1",
+      allowLookupPanel: this.context.parameters.commandQuickCreate?.raw === "1",
+      disabled: this.context.mode.isControlDisabled,
+      defaultLanguagePack: this.languagePack,
+      languagePackPath: this.context.parameters.languagePackPath?.raw ?? undefined,
+      fluentDesign: this.context.fluentDesignLanguage,
+      onChange: (value) => {
+        this.output = value;
+        this.notifyOutputChanged();
+      },
+    };
+
+    this.root.render(React.createElement(LookdownControl, props));
   }
 }

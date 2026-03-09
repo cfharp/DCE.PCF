@@ -78,6 +78,7 @@ export default function LookdownControlNewLook({
   groupBy,
   optionTemplate,
   selectedItemTemplate,
+  placeholder,
   showIcon,
   iconSize,
   openRecordMode,
@@ -326,7 +327,7 @@ export default function LookdownControlNewLook({
           className={dropdownStyles}
           clearable={!disabled && !isError}
           disabled={disabled || isError}
-          placeholder={isError ? languagePack.LoadDataErrorMessage : "---"}
+          placeholder={isError ? languagePack.LoadDataErrorMessage : placeholder}
           value={isError ? "" : selectedDisplayText}
           selectedOptions={isError ? [] : selectedValues}
           button={
