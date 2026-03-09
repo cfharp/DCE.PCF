@@ -151,7 +151,7 @@ export default function LookdownControlNewLook({
         } as ComponentFramework.LookupValue;
 
         setSelectedValues([selectionItem.id]);
-        setSelectedDisplayText(selectionItem?.optionText);
+        setSelectedDisplayText(selectionItem.optionText);
       } else {
         setSelectedValues([]);
         setSelectedDisplayText("");
@@ -331,11 +331,13 @@ export default function LookdownControlNewLook({
           value={isError ? "" : selectedDisplayText}
           selectedOptions={isError ? [] : selectedValues}
           button={
-            <OptionDisplay
-              optionText={selectedOption?.optionText ?? ""}
-              iconSrc={selectedOption?.iconSrc}
-              iconSize={selectedOption?.iconSize}
-            />
+            selectedId && selectedOption ? (
+              <OptionDisplay
+                optionText={selectedOption?.optionText ?? placeholder ?? ""}
+                iconSrc={selectedOption?.iconSrc}
+                iconSize={selectedOption?.iconSize}
+              />
+            ) : undefined
           }
           expandIcon={disabled || isError ? { className: styles.hidden } : undefined}
           onOptionSelect={handleOptionSelect}

@@ -1,4 +1,5 @@
 export interface LanguagePack {
+  PlaceholderLabel: string;
   BlankValueLabel: string;
   EmptyListMessage: string;
   OpenRecordLabel: string;

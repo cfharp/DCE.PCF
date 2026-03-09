@@ -28,7 +28,8 @@
       description-key="Dynamic template to display selected option text. Default to option text if not provided."
       of-type="SingleLine.Text" usage="input" required="false" />
     <property name="placeholder" display-name-key="Placeholder"
-      description-key="The text that shows when no value is selected." of-type="SingleLine.Text"
+      description-key="The text that shows when no value is selected. This will override placeholder from language pack."
+      of-type="SingleLine.Text"
       usage="input" required="false" />
     <property name="showIcon" display-name-key="Show Icon"
       description-key="Whether to show an icon in option item. Default: None." of-type="Enum"

@@ -39,6 +39,7 @@ export class Lookdown implements ComponentFramework.StandardControl<IInputs, IOu
     this.context = context;
     this.container = container;
     this.languagePack = {
+      PlaceholderLabel: context.resources.getString("PlaceholderLabel"),
       BlankValueLabel: context.resources.getString("BlankValueLabel"),
       EmptyListMessage: context.resources.getString("EmptyListMessage"),
       OpenRecordLabel: context.resources.getString("OpenRecordLabel"),
@@ -87,7 +88,8 @@ export class Lookdown implements ComponentFramework.StandardControl<IInputs, IOu
   public render(): void {
     const isAuthoringMode = this.context.mode?.isAuthoringMode;
     const placeholder =
-      this.context.parameters.placeholder?.raw ?? (this.context.mode.isAuthoringMode ? "---" : undefined);
+      this.context.parameters.placeholder?.raw ??
+      (this.context.mode.isAuthoringMode ? "---" : this.languagePack.PlaceholderLabel);
 
     const props: LookdownControlProps = {
       lookupViewId: isAuthoringMode
