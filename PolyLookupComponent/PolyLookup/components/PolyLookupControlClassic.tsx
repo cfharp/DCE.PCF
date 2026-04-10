@@ -36,6 +36,19 @@ import { useMetadata } from "../hooks/queries/useMetadata";
 import { useSelectedItems } from "../hooks/queries/useSelectedItems";
 import { getPlaceholder } from "../utils";
 
+Handlebars.registerHelper('ifEq', function(a, b, options) {
+  if (a == b) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+});
+Handlebars.registerHelper('ifIn', function(a, list, options) {
+  if (list?.indexOf(a) > -1) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+});
+
 interface ITagWithData extends ITag {
   data: EntityOption;
 }
