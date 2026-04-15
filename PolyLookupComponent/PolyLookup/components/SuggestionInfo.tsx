@@ -46,7 +46,7 @@ export const SuggestionInfo = ({ data, columns, showOptionDetails, isModern }: I
 
   return (
     <Stack horizontal grow styles={{ root: { flex: 1, minWidth: 0 } }}>
-      <Stack.Item grow align="stretch" styles={{ root: { minWidth: "0", padding: 10 } }}>
+      <Stack.Item grow align="stretch" styles={{ root: { minWidth: "0", padding: 2 } }}>
         {Array.from(infoMap).map(([key, value], index) => {
           if (value === "") return null;
           if (!showMore && index > 0) return null;

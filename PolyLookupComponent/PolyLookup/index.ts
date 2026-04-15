@@ -12,6 +12,7 @@ import {
   ShowOptionDetailsEnum,
   TagAction,
 } from "./types/typings";
+import { registerHandlebarsHelpers } from "./services/TemplateService";
 export class PolyLookup implements ComponentFramework.StandardControl<IInputs, IOutputs> {
   private container: HTMLDivElement;
   private root: Root;
@@ -42,6 +43,8 @@ export class PolyLookup implements ComponentFramework.StandardControl<IInputs, I
     state: ComponentFramework.Dictionary,
     container: HTMLDivElement
   ): void {
+    registerHandlebarsHelpers();
+
     this.notifyOutputChanged = notifyOutputChanged;
     this.context = context;
     this.container = container;
@@ -139,7 +142,7 @@ export class PolyLookup implements ComponentFramework.StandardControl<IInputs, I
       fluentDesign: this.context.fluentDesignLanguage,
       onChange:
         this.context.parameters.outputSelected?.raw === "1" ||
-        this.context.parameters.outputField?.attributes?.LogicalName
+          this.context.parameters.outputField?.attributes?.LogicalName
           ? this.onLookupChange
           : undefined,
       onQuickCreate: this.context.parameters.allowQuickCreate?.raw === "1" ? this.onQuickCreate : undefined,
